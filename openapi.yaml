@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: CivicSage
+  description: |
+    CivicSage is a service that allows you to index files and websites.
+  version: 0.0.1
+
+paths:
+  /index/file:
+    post:
+      summary: Index new files
+      description: |
+        This endpoint allows you to index new files by uploading them.
+      operationId: IndexFiles
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Indexing successful
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /index/url:
+    post:
+      summary: Index Website
+      description: |
+        This endpoint allows you to index a website by providing its URL.
+        The service will only index the site the url points to.
+        It will not follow links.
+      operationId: IndexWebsite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL of the website to index
+      responses:
+        '200':
+          description: Indexing successful
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /search:
+    post:
+      summary: Search for files
+      description: |
+        This endpoint allows you to search for indexed files.
+        You can specify the page number and size for pagination.
+        The search query is required in the request body.
+      operationId: SearchFiles
+      parameters:
+        - name: pageNumber
+          in: query
+          description: Page number
+          required: false
+          schema:
+            default: 0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Page size
+          required: false
+          schema:
+            default: 20
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchQuery'
+      responses:
+        '200':
+          description: Search successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/searchResult'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    searchQuery:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The search query to find indexed files
+    searchResult:
+      type: object
+      required:
+        - text
+        - score
+      properties:
+        fileName:
+          type: string
+          description: |
+            The name of the file that was indexed.
+            If this is present, it means the result is from a file.
+        fileRef:
+          type: string
+          description: |
+            The reference to the file that was indexed.
+            If this is present, it means the result is from a file.
+        url:
+          type: string
+          description: |
+            The URL of the website that was indexed.
+            If this is present, it means the result is from a website.
+        text:
+          type: string
+          description: |
+            The text content of the indexed file or website.
+            This is the embedded text that matched the search query.
+        score:
+          type: number
+          format: double
+          description: |
+            The score of the search result.
+            This is a measure of how well the result matches the search query.
+            Higher scores indicate better matches.
+            The value is between 0 and 1, where 1 is a perfect match.
