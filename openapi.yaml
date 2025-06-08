@@ -45,6 +45,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - url
               properties:
                 url:
                   type: string
