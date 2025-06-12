@@ -3,7 +3,7 @@ info:
   title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.0.2
+  version: 0.1.0
 
 paths:
   /index/file:
@@ -100,6 +100,34 @@ paths:
                   $ref: '#/components/schemas/searchResult'
         '400':
           description: Bad request
+        '500':
+          description: Internal server error
+  /download/file:
+    get:
+      summary: Download indexed file
+      description: |
+        This endpoint allows you to download an indexed file by its reference.
+        The file reference is required as a query parameter.
+      operationId: DownloadFile
+      parameters:
+        - name: fileRef
+          in: query
+          description: The reference of the file to download
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File downloaded successfully
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+        '404':
+          description: File not found
         '500':
           description: Internal server error
 
