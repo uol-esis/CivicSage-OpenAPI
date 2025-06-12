@@ -110,7 +110,7 @@ paths:
         The file reference is required as a query parameter.
       operationId: DownloadFile
       parameters:
-        - name: fileRef
+        - name: fileId
           in: query
           description: The reference of the file to download
           required: true
@@ -124,6 +124,14 @@ paths:
               schema:
                 type: string
                 format: binary
+          headers:
+            Content-Disposition:
+              description: |
+                The Content-Disposition header is used to specify the file name
+                when the file is downloaded.
+              schema:
+                type: string
+                example: attachment; filename="downloaded_file.txt"
         '400':
           description: Bad request
         '404':
@@ -152,8 +160,9 @@ components:
           description: |
             The name of the file that was indexed.
             If this is present, it means the result is from a file.
-        fileRef:
+        fileId:
           type: string
+          format: uuid
           description: |
             The reference to the file that was indexed.
             If this is present, it means the result is from a file.
