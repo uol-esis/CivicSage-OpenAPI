@@ -3,7 +3,7 @@ info:
   title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.0.2
+  version: 0.1.0
 
 paths:
   /index/file:
@@ -18,17 +18,22 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              additionalProperties: true
               required:
-                - file
+                - files
               properties:
-                file:
-                  type: string
-                  format: binary
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
       responses:
         '200':
           description: Indexing successful
         '400':
           description: Bad request
+        '409':
+          description: File already indexed
         '500':
           description: Internal server error
   /index/url:
@@ -45,6 +50,7 @@ paths:
           application/json:
             schema:
               type: object
+              additionalProperties: true
               required:
                 - url
               properties:
@@ -56,6 +62,8 @@ paths:
           description: Indexing successful
         '400':
           description: Bad request
+        '409':
+          description: Website already indexed
         '500':
           description: Internal server error
   /search:
@@ -102,6 +110,31 @@ paths:
           description: Bad request
         '500':
           description: Internal server error
+  /files/{id}:
+    get:
+      summary: Download file
+      description: |
+        This endpoint provides the specified file as a download.
+      operationId: downloadFile
+      parameters:
+        - in: path
+          name: id
+          description: |
+            The identifier for the file to download.
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
 
 components:
   schemas:
@@ -115,25 +148,40 @@ components:
           description: The search query to find indexed files
     searchResult:
       type: object
+      additionalProperties: true
+      description: |
+        Additional properties:
+         - none yet
       required:
+        - documentId
+        - title
         - text
         - score
       properties:
+        documentId:
+          type: string
+          format: uuid
+          description: |
+            This identifies this text.
         fileName:
           type: string
           description: |
             The name of the file that was indexed.
             If this is present, it means the result is from a file.
-        fileRef:
+        fileId:
           type: string
           description: |
-            The reference to the file that was indexed.
+            The identifier for the file that was indexed.
             If this is present, it means the result is from a file.
         url:
           type: string
           description: |
             The URL of the website that was indexed.
             If this is present, it means the result is from a website.
+        title:
+          type: string
+          description: |
+            The title of the source.
         text:
           type: string
           description: |
