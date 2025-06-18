@@ -20,7 +20,6 @@ paths:
               type: object
               required:
                 - files
-                - additionalMetadata
               properties:
                 files:
                   type: array
