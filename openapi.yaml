@@ -17,17 +17,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - fileRef
-                - name
-              properties:
-                fileRef:
-                  type: string
-                  format: uuid
-                name: 
-                  type: string
-              additionalProperties: true
+              type: array
+              items:
+                type: object
+                required:
+                  - fileRef
+                  - name
+                properties:
+                  fileRef:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                additionalProperties: true
       responses:
         '200':
           description: Indexing successful
