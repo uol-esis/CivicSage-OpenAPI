@@ -195,16 +195,16 @@ paths:
             schema:
               $ref: '#/components/schemas/feedback'
       responses:
-        "201":
+        '201':
           description: Created
           content:
             application/json:
               schema:
                 type: string
                 format: uuid
-        "400":
+        '400':
           description: Bad request
-        "401":
+        '401':
           description: Unauthorized
   /system/info:
     get:
