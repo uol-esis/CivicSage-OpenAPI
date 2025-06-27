@@ -3,7 +3,7 @@ info:
   title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.1.0
+  version: 0.2.0
 
 paths:
   /index/file:
@@ -15,19 +15,21 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
-              type: object
-              required:
-                - files
-              properties:
-                files:
-                  type: array
-                  items:
+              type: array
+              items:
+                type: object
+                required:
+                  - fileId
+                  - name
+                properties:
+                  fileId:
                     type: string
-                    format: binary
-                additionalMetadata:
-                  $ref: '#/components/schemas/additionalMetadata'
+                    format: uuid
+                  name:
+                    type: string
+                additionalProperties: true
       responses:
         '200':
           description: Indexing successful
@@ -53,12 +55,14 @@ paths:
               type: object
               required:
                 - url
+                - name
               properties:
                 url:
                   type: string
                   description: The URL of the website to index
-                additionalMetadata:
-                  $ref: '#/components/schemas/additionalMetadata'
+                name: 
+                  type: string
+              additionalProperties: true
       responses:
         '200':
           description: Indexing successful
@@ -112,14 +116,14 @@ paths:
           description: Bad request
         '500':
           description: Internal server error
-  /files/{id}:
+  /files:
     get:
       summary: Download file
       description: |
         This endpoint provides the specified file as a download.
       operationId: downloadFile
       parameters:
-        - in: path
+        - in: query
           name: id
           description: |
             The identifier for the file to download.
@@ -145,6 +149,42 @@ paths:
                 example: attachment; filename="downloaded_file.txt"
         '404':
           description: File not found
+    post:
+      summary: Upload file
+      description: |
+        This endpoint you to upload a file for indexing.
+        This endpoint will **not** index the file.
+        It is only for uploading files that you want to index later.
+      operationId: uploadFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
 
 components:
   schemas:
@@ -205,9 +245,4 @@ components:
             This is a measure of how well the result matches the search query.
             Higher scores indicate better matches.
             The value is between 0 and 1, where 1 is a perfect match.
-        additionalMetadata:
-          $ref: '#/components/schemas/additionalMetadata'
-    additionalMetadata:
-      type: object
-      additionalProperties:
-        type: string
+      additionalProperties: true
