@@ -185,6 +185,40 @@ paths:
           description: Bad request
         '500':
           description: Internal server error
+  /feedback:
+    post:
+      operationId: submitFeedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/feedback'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+  /system/info:
+    get:
+      summary: Get system information
+      description: |
+        This endpoint provides information about the system.
+      operationId: getSystemInfo
+      responses:
+        '200':
+          description: System information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/systemInfo'
 
 components:
   schemas:
@@ -246,3 +280,49 @@ components:
             Higher scores indicate better matches.
             The value is between 0 and 1, where 1 is a perfect match.
       additionalProperties: true
+    feedback:
+      description: This represents a feedback message.
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          description: |
+            The content of the feedback message.
+            This can be an arbitrary string.
+    systemInfo:
+      type: object
+      required:
+        - serverVersion
+        - apiVersion
+        - embeddingContextWindow
+        - chatContextWindow
+        - maxEmbeddingsInChat
+        - supportedFileEndings
+        - maxFileSize
+      properties:
+        serverVersion:
+          type: string
+          description: The version of the server
+        apiVersion:
+          type: string
+          description: The version of the API implemented by the server
+        embeddingContextWindow:
+          type: integer
+          description: The context window size used for embeddings
+        chatContextWindow:
+          type: integer
+          description: The context window size used for chat interactions
+        maxEmbeddingsInChat:
+          type: integer
+          description: The maximum number of embeddings that can be used in a chat
+        supportedFileEndings:
+          type: array
+          items:
+            type: string
+          description: The file endings that are supported for indexing.
+        maxFileSize:
+          type: integer
+          description: The maximum file size that can be uploaded for indexing, in megabytes.
