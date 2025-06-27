@@ -21,10 +21,10 @@ paths:
               items:
                 type: object
                 required:
-                  - fileRef
+                  - fileId
                   - name
                 properties:
-                  fileRef:
+                  fileId:
                     type: string
                     format: uuid
                   name:
@@ -55,6 +55,7 @@ paths:
               type: object
               required:
                 - url
+                - name
               properties:
                 url:
                   type: string
@@ -115,14 +116,14 @@ paths:
           description: Bad request
         '500':
           description: Internal server error
-  /files/{id}:
+  /files:
     get:
       summary: Download file
       description: |
         This endpoint provides the specified file as a download.
       operationId: downloadFile
       parameters:
-        - in: path
+        - in: query
           name: id
           description: |
             The identifier for the file to download.
@@ -148,9 +149,8 @@ paths:
                 example: attachment; filename="downloaded_file.txt"
         '404':
           description: File not found
-  /files/upload:
     post:
-      summary: Upload files
+      summary: Upload file
       description: |
         This endpoint you to upload a file for indexing.
         This endpoint will **not** index the file.
