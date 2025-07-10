@@ -289,6 +289,36 @@ paths:
           description: Document not found
         '500':
           description: Internal server error
+  /sources/files:
+    get:
+      summary: Get indexed files
+      description: |
+        This endpoint retrieves a list of indexed files.
+      operationId: getIndexedFiles
+      responses:
+        '200':
+          description: Indexed files retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fileSource'
+        '500':
+          description: Internal server error
+  /sources/websites:
+    get:
+      summary: Get indexed websites
+      description: |
+        This endpoint retrieves a list of indexed websites.
+      operationId: getIndexedWebsites
+      responses:
+        '200':
+          description: Indexed websites retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/websiteSource'
+        '500':
+          description: Internal server error
 
 components:
   schemas:
@@ -410,3 +440,30 @@ components:
             The metadata keys that are supported for indexing.
             These keys can be used to filter search results.
             Custom properties are not in this list but can be reached via the additional properties key.
+    fileSource:
+      type: array
+      items:
+        type: object
+        required:
+          - fileId
+          - name
+        properties:
+          fileId:
+            type: string
+            format: uuid
+            description: The unique identifier for the indexed file
+          fileName:
+            type: string
+            description: The name of the indexed file
+    websiteSource:
+      type: object
+      required:
+        - url
+        - name
+      properties:
+        url:
+          type: string
+          description: The URL of the indexed website
+        title:
+          type: string
+          description: The name of the indexed website
