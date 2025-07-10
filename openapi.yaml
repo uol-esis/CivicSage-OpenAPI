@@ -203,6 +203,10 @@ paths:
           description: Internal server error
   /feedback:
     post:
+      summary: Submit feedback
+      description: |
+        This endpoint allows you to submit feedback.
+        The feedback can be an arbitrary string.
       operationId: submitFeedback
       requestBody:
         required: true
