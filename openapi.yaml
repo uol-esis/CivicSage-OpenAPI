@@ -3,7 +3,7 @@ info:
   title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.2.0
+  version: 0.3.0
 
 paths:
   /index/file:
@@ -239,7 +239,7 @@ paths:
     get:
       summary: Get metadata keys
       description: |
-        This endpoint provides the metadata keys that are supported for indexing.
+        This endpoint provides the metadata keys that are supported for searching.
         This list includes custom keys provided via additional properties.
         All keys are complete. So there is no need to add `additionalProperties.` for custom keys.
       operationId: getMetadataKeys
