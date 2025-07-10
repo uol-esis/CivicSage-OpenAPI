@@ -223,6 +223,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/systemInfo'
+  /system/metadata-keys:
+    get:
+      summary: Get metadata keys
+      description: |
+        This endpoint provides the metadata keys that are supported for indexing.
+        This list includes custom keys provided via additional properties.
+        All keys are complete. So there is no need to add `additionalProperties.` for custom keys.
+      operationId: getMetadataKeys
+      responses:
+        '200':
+          description: Metadata keys retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: string
   /completions/summary:
     post:
       summary: Summarize embeddings with a prompt
