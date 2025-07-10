@@ -3,7 +3,7 @@ info:
   title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.2.0
+  version: 0.3.0
 
 paths:
   /index/file:
@@ -22,17 +22,28 @@ paths:
                 type: object
                 required:
                   - fileId
-                  - name
                 properties:
                   fileId:
                     type: string
                     format: uuid
-                  name:
+                    description: The id returned by the upload endpoint
+                  title:
                     type: string
+                    description: |
+                      The title of the file used in search results.
+                      Defaults to the file name without the file ending.
+                  date:
+                    type: string
+                    format: date
+                    description: |
+                      A date associated with the file.
+                      This can be used to filter search results by date.
                 additionalProperties: true
       responses:
         '200':
           description: Indexing successful
+        '202':
+          description: Indexing accepted, processing in background since it takes too long
         '400':
           description: Bad request
         '409':
@@ -55,17 +66,22 @@ paths:
               type: object
               required:
                 - url
-                - name
               properties:
                 url:
                   type: string
                   description: The URL of the website to index
-                name:
+                date:
                   type: string
+                  format: date
+                  description: |
+                    A date associated with the file.
+                    This can be used to filter search results by date.
               additionalProperties: true
       responses:
         '200':
           description: Indexing successful
+        '202':
+          description: Indexing accepted, processing in background since it takes too long
         '400':
           description: Bad request
         '409':
@@ -187,6 +203,10 @@ paths:
           description: Internal server error
   /feedback:
     post:
+      summary: Submit feedback
+      description: |
+        This endpoint allows you to submit feedback.
+        The feedback can be an arbitrary string.
       operationId: submitFeedback
       requestBody:
         required: true
@@ -219,6 +239,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/systemInfo'
+  /system/metadata-keys:
+    get:
+      summary: Get metadata keys
+      description: |
+        This endpoint provides the metadata keys that are supported for searching.
+        This list includes custom keys provided via additional properties.
+        All keys are complete. So there is no need to add `additionalProperties.` for custom keys.
+      operationId: getMetadataKeys
+      responses:
+        '200':
+          description: Metadata keys retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: string
   /completions/summary:
     post:
       summary: Summarize embeddings with a prompt
@@ -263,6 +303,59 @@ paths:
           description: Bad request
         '404':
           description: Document not found
+        '500':
+          description: Internal server error
+  /sources:
+    get:
+      summary: Get all indexed sources
+      description: |
+        This endpoint retrieves a list of all indexed sources, including files and websites.
+      operationId: getAllIndexedSources
+      parameters:
+        - in: query
+          name: filterExpression
+          description: |
+            An optional filter expression to filter the indexed sources.
+            This can be used to filter results based on specific criteria.
+            The syntax of the filter expression can be found in the server documentation.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Indexed sources retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    $ref: '#/components/schemas/fileSource'
+                  websites:
+                    $ref: '#/components/schemas/websiteSource'
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete indexed source
+      description: |
+        This endpoint allows you to delete an indexed source by its ID.
+        The ID can be either a fileId or a websiteId.
+        If deleting a file, the file will be removed from storage.
+      operationId: deleteIndexedSource
+      parameters:
+        - in: query
+          name: id
+          description: |
+            The identifier for the source to delete.
+            This can be either a fileId or a websiteId.
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '204':
+          description: Source deleted successfully
+        '404':
+          description: Source not found
         '500':
           description: Internal server error
 
@@ -386,3 +479,41 @@ components:
             The metadata keys that are supported for indexing.
             These keys can be used to filter search results.
             Custom properties are not in this list but can be reached via the additional properties key.
+    fileSource:
+      type: array
+      items:
+        type: object
+        required:
+          - fileId
+          - fileName
+          - title
+        properties:
+          fileId:
+            type: string
+            format: uuid
+            description: The unique identifier for the indexed file
+          fileName:
+            type: string
+            description: The name of the indexed file
+          title:
+            type: string
+            description: The title of the indexed file, used in search results
+        additionalProperties: true
+    websiteSource:
+      type: object
+      required:
+        - websiteId
+        - url
+        - title
+      properties:
+        websiteId:
+          type: string
+          format: uuid
+          description: The unique identifier for the indexed website
+        url:
+          type: string
+          description: The URL of the indexed website
+        title:
+          type: string
+          description: The name of the indexed website
+      additionalProperties: true
