@@ -22,13 +22,22 @@ paths:
                 type: object
                 required:
                   - fileId
-                  - name
                 properties:
                   fileId:
                     type: string
                     format: uuid
-                  name:
+                    description: The id returned by the upload endpoint
+                  title:
                     type: string
+                    description: |
+                      The title of the file used in search results.
+                      Defaults to the file name without the file ending.
+                  date:
+                    type: string
+                    format: date
+                    description: |
+                      A date associated with the file.
+                      This can be used to filter search results by date.
                 additionalProperties: true
       responses:
         '200':
@@ -57,13 +66,16 @@ paths:
               type: object
               required:
                 - url
-                - name
               properties:
                 url:
                   type: string
                   description: The URL of the website to index
-                name:
+                date:
                   type: string
+                  format: date
+                  description: |
+                    A date associated with the file.
+                    This can be used to filter search results by date.
               additionalProperties: true
       responses:
         '200':
