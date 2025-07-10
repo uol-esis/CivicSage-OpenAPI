@@ -329,9 +329,13 @@ paths:
                 type: object
                 properties:
                   files:
-                    $ref: '#/components/schemas/fileSource'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/fileSource'
                   websites:
-                    $ref: '#/components/schemas/websiteSource'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/websiteSource'
         '500':
           description: Internal server error
     delete:
@@ -480,25 +484,23 @@ components:
             These keys can be used to filter search results.
             Custom properties are not in this list but can be reached via the additional properties key.
     fileSource:
-      type: array
-      items:
-        type: object
-        required:
-          - fileId
-          - fileName
-          - title
-        properties:
-          fileId:
-            type: string
-            format: uuid
-            description: The unique identifier for the indexed file
-          fileName:
-            type: string
-            description: The name of the indexed file
-          title:
-            type: string
-            description: The title of the indexed file, used in search results
-        additionalProperties: true
+      type: object
+      required:
+        - fileId
+        - fileName
+        - title
+      properties:
+        fileId:
+          type: string
+          format: uuid
+          description: The unique identifier for the indexed file
+        fileName:
+          type: string
+          description: The name of the indexed file
+        title:
+          type: string
+          description: The title of the indexed file, used in search results
+      additionalProperties: true
     websiteSource:
       type: object
       required:
