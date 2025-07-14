@@ -1,0 +1,17 @@
+type: object
+required:
+  - websiteId
+  - url
+  - title
+properties:
+  websiteId:
+    type: string
+    format: uuid
+    description: The unique identifier for the indexed website
+  url:
+    type: string
+    description: The URL of the indexed website
+  title:
+    type: string
+    description: The name of the indexed website
+additionalProperties: true

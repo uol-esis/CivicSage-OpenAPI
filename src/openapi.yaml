@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: CivicSage
+  description: |
+    CivicSage is a service that allows you to index files and websites.
+  version: 0.3.0
+
+paths:
+  /index/file:
+    $ref: './paths/index.yaml#/file'
+  /index/url:
+    $ref: './paths/index.yaml#/url'
+  /search:
+    $ref: './paths/search.yaml'
+  /files:
+    $ref: './paths/files.yaml'
+  /feedback:
+    $ref: './paths/feedback.yaml'
+  /system/info:
+    $ref: './paths/system.yaml#/info'
+  /system/metadata-keys:
+    $ref: './paths/system.yaml#/metadata-keys'
+  /completions/summary:
+    $ref: './paths/completions.yaml#/summary'
+  /sources:
+    $ref: './paths/sources.yaml'
+
+components:
+  schemas:
+    searchQuery:
+      $ref: './components/schemas/searchQuery.yaml'
+    searchResult:
+      $ref: './components/schemas/searchResult.yaml'
+    feedback:
+      $ref: './components/schemas/feedback.yaml'
+    systemInfo:
+      $ref: './components/schemas/systemInfo.yaml'
+    fileSource:
+      $ref: './components/schemas/fileSource.yaml'
+    websiteSource:
+      $ref: './components/schemas/websiteSource.yaml'
