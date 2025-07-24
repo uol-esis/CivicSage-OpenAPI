@@ -1,172 +1,143 @@
 openapi: 3.0.3
 info:
-  title: CivicSage
   description: |
     CivicSage is a service that allows you to index files and websites.
-  version: 0.3.0
-
+  title: CivicSage
+  version: 0.4.0
+servers:
+- description: Local development server
+  url: localhost:8080/api/v1
 paths:
   /index/file:
     post:
-      summary: Index new files
       description: |
         This endpoint allows you to index new files by uploading them.
       operationId: IndexFiles
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: array
               items:
-                type: object
-                required:
-                  - fileId
-                properties:
-                  fileId:
-                    type: string
-                    format: uuid
-                    description: The id returned by the upload endpoint
-                  title:
-                    type: string
-                    description: |
-                      The title of the file used in search results.
-                      Defaults to the file name without the file ending.
-                  date:
-                    type: string
-                    format: date
-                    description: |
-                      A date associated with the file.
-                      This can be used to filter search results by date.
-                additionalProperties: true
+                $ref: '#/components/schemas/IndexFiles_request_inner'
+              type: array
+        required: true
       responses:
-        '200':
+        "200":
           description: Indexing successful
-        '202':
-          description: Indexing accepted, processing in background since it takes too long
-        '400':
+        "202":
+          description: "Indexing accepted, processing in background since it takes\
+            \ too long"
+        "400":
           description: Bad request
-        '409':
+        "409":
           description: File already indexed
-        '500':
+        "500":
           description: Internal server error
+      summary: Index new files
   /index/url:
     post:
-      summary: Index Website
       description: |
         This endpoint allows you to index a website by providing its URL.
         The service will only index the site the url points to.
         It will not follow links.
       operationId: IndexWebsite
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - url
-              properties:
-                url:
-                  type: string
-                  description: The URL of the website to index
-                date:
-                  type: string
-                  format: date
-                  description: |
-                    A date associated with the file.
-                    This can be used to filter search results by date.
-              additionalProperties: true
+              $ref: '#/components/schemas/IndexWebsite_request'
+        required: true
       responses:
-        '200':
+        "200":
           description: Indexing successful
-        '202':
-          description: Indexing accepted, processing in background since it takes too long
-        '400':
+        "202":
+          description: "Indexing accepted, processing in background since it takes\
+            \ too long"
+        "400":
           description: Bad request
-        '409':
+        "409":
           description: Website already indexed
-        '500':
+        "500":
           description: Internal server error
+      summary: Index Website
   /search:
     post:
-      summary: Search for files
       description: |
         This endpoint allows you to search for indexed files.
         You can specify the page number and size for pagination.
         The search query is required in the request body.
       operationId: SearchFiles
       parameters:
-        - name: pageNumber
-          in: query
-          description: Page number
-          required: false
-          schema:
-            default: 0
-            type: integer
-            format: int32
-        - name: pageSize
-          in: query
-          description: Page size
-          required: false
-          schema:
-            default: 20
-            type: integer
-            format: int32
+      - description: Page number
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 0
+          format: int32
+          type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 20
+          format: int32
+          type: integer
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/searchQuery'
+        required: true
       responses:
-        '200':
-          description: Search successful
+        "200":
           content:
             application/json:
               schema:
-                type: array
                 items:
                   $ref: '#/components/schemas/searchResult'
-        '400':
+                type: array
+          description: Search successful
+        "400":
           description: Bad request
-        '500':
+        "500":
           description: Internal server error
+      summary: Search for files
   /files:
     get:
-      summary: Download file
       description: |
         This endpoint provides the specified file as a download.
       operationId: downloadFile
       parameters:
-        - in: query
-          name: id
-          description: |
-            The identifier for the file to download.
-          schema:
-            type: string
-            format: uuid
-          required: true
+      - description: |
+          The identifier for the file to download.
+        in: query
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
       responses:
-        '200':
-          description: OK
+        "200":
           content:
             application/octet-stream:
               schema:
-                type: string
                 format: binary
+                type: string
+          description: OK
           headers:
             Content-Disposition:
               description: |
                 The Content-Disposition header is used to specify the file name
                 when the file is downloaded.
               schema:
-                type: string
                 example: attachment; filename="downloaded_file.txt"
-        '404':
+                type: string
+        "404":
           description: File not found
+      summary: Download file
     post:
-      summary: Upload file
       description: |
         This endpoint you to upload a file for indexing.
         This endpoint will **not** index the file.
@@ -176,346 +147,451 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              required:
-                - file
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/uploadFile_request'
       responses:
-        '200':
-          description: OK
+        "200":
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - id
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    example: "123e4567-e89b-12d3-a456-426614174000"
-        '400':
+                $ref: '#/components/schemas/uploadFile_200_response'
+          description: OK
+        "400":
           description: Bad request
-        '500':
+        "500":
           description: Internal server error
+      summary: Upload file
   /feedback:
     post:
-      summary: Submit feedback
       description: |
         This endpoint allows you to submit feedback.
         The feedback can be an arbitrary string.
       operationId: submitFeedback
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/feedback'
+        required: true
       responses:
-        '201':
-          description: Created
+        "201":
           content:
             application/json:
               schema:
-                type: string
                 format: uuid
-        '400':
+                type: string
+          description: Created
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
+      summary: Submit feedback
   /system/info:
     get:
-      summary: Get system information
       description: |
         This endpoint provides information about the system.
       operationId: getSystemInfo
       responses:
-        '200':
-          description: System information retrieved successfully
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/systemInfo'
+          description: System information retrieved successfully
+      summary: Get system information
   /system/metadata-keys:
     get:
-      summary: Get metadata keys
       description: |
         This endpoint provides the metadata keys that are supported for searching.
         This list includes custom keys provided via additional properties.
         All keys are complete. So there is no need to add `additionalProperties.` for custom keys.
       operationId: getMetadataKeys
       responses:
-        '200':
-          description: Metadata keys retrieved successfully
+        "200":
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  keys:
-                    type: array
-                    items:
-                      type: string
+                $ref: '#/components/schemas/getMetadataKeys_200_response'
+          description: Metadata keys retrieved successfully
+      summary: Get metadata keys
   /completions/summary:
     post:
-      summary: Summarize embeddings with a prompt
       description: |
         This endpoint allows you to summarize embeddings using a prompt.
         The prompt is used to generate a summary of the embeddings.
       operationId: summarizeEmbeddings
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - documentIds
-                - prompt
-              properties:
-                documentIds:
-                  type: array
-                  items:
-                    type: string
-                    format: uuid
-                  description: Ids of the documents to summarize
-                prompt:
-                  type: string
-                  description: The prompt to use for summarizing the embeddings
-                systemPrompt:
-                  type: string
-                  description: The system prompt
+              $ref: '#/components/schemas/summarizeEmbeddings_request'
+        required: true
       responses:
-        '200':
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/summarizeEmbeddings_200_response'
           description: Summary generated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  summary:
-                    type: string
-                    description: The generated summary of the embeddings
-        '400':
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Document not found
-        '500':
+        "500":
           description: Internal server error
+      summary: Summarize embeddings with a prompt
   /sources:
-    get:
-      summary: Get all indexed sources
-      description: |
-        This endpoint retrieves a list of all indexed sources, including files and websites.
-      operationId: getAllIndexedSources
-      parameters:
-        - in: query
-          name: filterExpression
-          description: |
-            An optional filter expression to filter the indexed sources.
-            This can be used to filter results based on specific criteria.
-            The syntax of the filter expression can be found in the server documentation.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Indexed sources retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  files:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/fileSource'
-                  websites:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/websiteSource'
-        '500':
-          description: Internal server error
     delete:
-      summary: Delete indexed source
       description: |
         This endpoint allows you to delete an indexed source by its ID.
         The ID can be either a fileId or a websiteId.
         If deleting a file, the file will be removed from storage.
       operationId: deleteIndexedSource
       parameters:
-        - in: query
-          name: id
-          description: |
-            The identifier for the source to delete.
-            This can be either a fileId or a websiteId.
-          schema:
-            type: string
-            format: uuid
-          required: true
+      - description: |
+          The identifier for the source to delete.
+          This can be either a fileId or a websiteId.
+        in: query
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
       responses:
-        '204':
+        "204":
           description: Source deleted successfully
-        '404':
+        "404":
           description: Source not found
-        '500':
+        "500":
           description: Internal server error
-
+      summary: Delete indexed source
+    get:
+      description: |
+        This endpoint retrieves a list of all indexed sources, including files and websites.
+      operationId: getAllIndexedSources
+      parameters:
+      - description: |
+          An optional filter expression to filter the indexed sources.
+          This can be used to filter results based on specific criteria.
+          The syntax of the filter expression can be found in the server documentation.
+        in: query
+        name: filterExpression
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getAllIndexedSources_200_response'
+          description: Indexed sources retrieved successfully
+        "500":
+          description: Internal server error
+      summary: Get all indexed sources
 components:
   schemas:
     searchQuery:
-      type: object
-      required:
-        - query
       properties:
         query:
-          type: string
           description: The search query to find indexed files
-        filterExpression:
           type: string
+        filterExpression:
           description: |
             An optional filter expression to filter the search results.
             This can be used to filter results based on specific criteria.
             The syntax of the filter expression can be found in the server documentation.
-    searchResult:
+          type: string
+      required:
+      - query
       type: object
+    searchResult:
+      additionalProperties: true
       description: |
         Additional properties:
          - none yet
-      required:
-        - documentId
-        - title
-        - text
-        - score
+      example:
+        score: 0.8008281904610115
+        fileName: fileName
+        documentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        text: text
+        title: title
+        url: url
+        fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         documentId:
-          type: string
-          format: uuid
           description: |
             This identifies this text.
-        fileName:
+          format: uuid
           type: string
+        fileName:
           description: |
             The name of the file that was indexed.
             If this is present, it means the result is from a file.
-        fileId:
           type: string
-          format: uuid
+        fileId:
           description: |
             The identifier for the file that was indexed.
             If this is present, it means the result is from a file.
-        url:
+          format: uuid
           type: string
+        url:
           description: |
             The URL of the website that was indexed.
             If this is present, it means the result is from a website.
-        title:
           type: string
+        title:
           description: |
             The title of the source.
-        text:
           type: string
+        text:
           description: |
             The text content of the indexed file or website.
             This is the embedded text that matched the search query.
+          type: string
         score:
-          type: number
-          format: double
           description: |
             The score of the search result.
             This is a measure of how well the result matches the search query.
             Higher scores indicate better matches.
             The value is between 0 and 1, where 1 is a perfect match.
-      additionalProperties: true
+          format: double
+          type: number
+      required:
+      - documentId
+      - score
+      - text
+      - title
+      type: object
     feedback:
       description: This represents a feedback message.
-      type: object
-      required:
-        - content
       properties:
         content:
-          type: string
-          minLength: 1
           description: |
             The content of the feedback message.
             This can be an arbitrary string.
-    systemInfo:
-      type: object
+          minLength: 1
+          type: string
       required:
-        - serverVersion
-        - apiVersion
-        - embeddingContextWindow
-        - chatContextWindow
-        - maxEmbeddingsInChat
+      - content
+      type: object
+    systemInfo:
+      example:
+        supportedFileEndings:
         - supportedFileEndings
-        - maxFileSize
+        - supportedFileEndings
+        serverVersion: serverVersion
+        maxEmbeddingsInChat: 1
+        metadataKeys:
+        - metadataKeys
+        - metadataKeys
+        apiVersion: apiVersion
+        embeddingContextWindow: 0
+        chatContextWindow: 6
+        maxFileSize: 5
       properties:
         serverVersion:
-          type: string
           description: The version of the server
-        apiVersion:
           type: string
+        apiVersion:
           description: The version of the API implemented by the server
+          type: string
         embeddingContextWindow:
-          type: integer
           description: The context window size used for embeddings
+          type: integer
         chatContextWindow:
-          type: integer
           description: The context window size used for chat interactions
+          type: integer
         maxEmbeddingsInChat:
-          type: integer
           description: The maximum number of embeddings that can be used in a chat
-        supportedFileEndings:
-          type: array
-          items:
-            type: string
-          description: The file endings that are supported for indexing.
-        maxFileSize:
           type: integer
-          description: The maximum file size that can be uploaded for indexing, in megabytes.
-        metadataKeys:
-          type: array
+        supportedFileEndings:
+          description: The file endings that are supported for indexing.
           items:
             type: string
+          type: array
+        maxFileSize:
+          description: "The maximum file size that can be uploaded for indexing, in\
+            \ megabytes."
+          type: integer
+        metadataKeys:
           description: |
             The metadata keys that are supported for indexing.
             These keys can be used to filter search results.
             Custom properties are not in this list but can be reached via the additional properties key.
-    fileSource:
-      type: object
+          items:
+            type: string
+          type: array
       required:
-        - fileId
-        - fileName
-        - title
+      - apiVersion
+      - chatContextWindow
+      - embeddingContextWindow
+      - maxEmbeddingsInChat
+      - maxFileSize
+      - serverVersion
+      - supportedFileEndings
+      type: object
+    fileSource:
+      additionalProperties: true
+      example:
+        fileName: fileName
+        title: title
+        fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         fileId:
-          type: string
-          format: uuid
           description: The unique identifier for the indexed file
+          format: uuid
+          type: string
         fileName:
-          type: string
           description: The name of the indexed file
-        title:
           type: string
-          description: The title of the indexed file, used in search results
-      additionalProperties: true
-    websiteSource:
-      type: object
+        title:
+          description: "The title of the indexed file, used in search results"
+          type: string
       required:
-        - websiteId
-        - url
-        - title
+      - fileId
+      - fileName
+      - title
+      type: object
+    websiteSource:
+      additionalProperties: true
+      example:
+        websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        url: url
       properties:
         websiteId:
-          type: string
-          format: uuid
           description: The unique identifier for the indexed website
+          format: uuid
+          type: string
         url:
-          type: string
           description: The URL of the indexed website
-        title:
           type: string
+        title:
           description: The name of the indexed website
+          type: string
+      required:
+      - title
+      - url
+      - websiteId
+      type: object
+    IndexFiles_request_inner:
       additionalProperties: true
+      example:
+        date: 2000-01-23
+        title: title
+        fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        fileId:
+          description: The id returned by the upload endpoint
+          format: uuid
+          type: string
+        title:
+          description: |
+            The title of the file used in search results.
+            Defaults to the file name without the file ending.
+          type: string
+        date:
+          description: |
+            A date associated with the file.
+            This can be used to filter search results by date.
+          format: date
+          type: string
+      required:
+      - fileId
+      type: object
+    IndexWebsite_request:
+      additionalProperties: true
+      properties:
+        url:
+          description: The URL of the website to index
+          type: string
+        date:
+          description: |
+            A date associated with the file.
+            This can be used to filter search results by date.
+          format: date
+          type: string
+      required:
+      - url
+      type: object
+    uploadFile_request:
+      properties:
+        file:
+          format: binary
+          type: string
+      required:
+      - file
+      type: object
+    uploadFile_200_response:
+      example:
+        id: 123e4567-e89b-12d3-a456-426614174000
+      properties:
+        id:
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          type: string
+      required:
+      - id
+      type: object
+    getMetadataKeys_200_response:
+      example:
+        keys:
+        - keys
+        - keys
+      properties:
+        keys:
+          items:
+            type: string
+          type: array
+      type: object
+    summarizeEmbeddings_request:
+      properties:
+        documentIds:
+          description: Ids of the documents to summarize
+          items:
+            format: uuid
+            type: string
+          type: array
+        prompt:
+          description: The prompt to use for summarizing the embeddings
+          type: string
+        systemPrompt:
+          description: The system prompt
+          type: string
+      required:
+      - documentIds
+      - prompt
+      type: object
+    summarizeEmbeddings_200_response:
+      example:
+        summary: summary
+      properties:
+        summary:
+          description: The generated summary of the embeddings
+          type: string
+      type: object
+    getAllIndexedSources_200_response:
+      example:
+        files:
+        - fileName: fileName
+          title: title
+          fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - fileName: fileName
+          title: title
+          fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        websites:
+        - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: title
+          url: url
+        - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          title: title
+          url: url
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/fileSource'
+          type: array
+        websites:
+          items:
+            $ref: '#/components/schemas/websiteSource'
+          type: array
+      type: object

@@ -1,0 +1,17 @@
+type: object
+required:
+  - fileId
+  - fileName
+  - title
+properties:
+  fileId:
+    type: string
+    format: uuid
+    description: The unique identifier for the indexed file
+  fileName:
+    type: string
+    description: The name of the indexed file
+  title:
+    type: string
+    description: The title of the indexed file, used in search results
+additionalProperties: true

@@ -1,0 +1,46 @@
+summary:
+  post:
+    summary: Summarize embeddings with a prompt
+    description: |
+      This endpoint allows you to summarize embeddings using a prompt.
+      The prompt is used to generate a summary of the embeddings.
+    operationId: summarizeEmbeddings
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - documentIds
+              - prompt
+            properties:
+              documentIds:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+                description: Ids of the documents to summarize
+              prompt:
+                type: string
+                description: The prompt to use for summarizing the embeddings
+              systemPrompt:
+                type: string
+                description: The system prompt
+    responses:
+      '200':
+        description: Summary generated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                summary:
+                  type: string
+                  description: The generated summary of the embeddings
+      '400':
+        description: Bad request
+      '404':
+        description: Document not found
+      '500':
+        description: Internal server error
