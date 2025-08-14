@@ -941,7 +941,7 @@ Update indexed website
 
 ===== Description
 
-This endpoint allows you to update indexed website sources. It requires an array of websiteIds to update the corresponding sources. If the list is empty, all indexed websites will be updated. If the list contains specific websiteIds, only those will be updated. If the list contains a websiteId that does not exist, it will be ignored.
+This endpoint allows you to update indexed website sources. It requires an array of websiteIds to update the corresponding sources. If the list is empty, all indexed websites will be updated. If the list contains specific websiteIds, only those will be updated. If the list contains a websiteId that does not exist, it will be ignored. 
 
 
 // markup not found, no include::{specDir}sources/websites/update/POST/spec.adoc[opts=optional]
@@ -960,8 +960,8 @@ This endpoint allows you to update indexed website sources. It requires an array
 | UpdateIndexedWebsiteRequest
 |  <<UpdateIndexedWebsiteRequest>>
 | X
-|
-|
+| 
+| 
 
 |===
 
@@ -1168,18 +1168,18 @@ This represents a feedback message.
 |     
 
 | uploadDate
-|
-|
-|   Date
+| 
+| 
+|   Date  
 | The date and time when the file was uploaded
-| date-time
+| date-time    
 
 | embedded
-|
-|
-|   Boolean
+| 
+| 
+|   Boolean  
 | Indicates whether the file is embedded in the index. If true, the file content is indexed and searchable.
-|
+|     
 
 |===
 
@@ -1526,7 +1526,7 @@ Additional properties:
 
 
 [#UpdateIndexedWebsiteRequest]
-=== _UpdateIndexedWebsiteRequest_
+=== _UpdateIndexedWebsiteRequest_ 
 
 
 
@@ -1537,11 +1537,11 @@ Additional properties:
 | Field Name| Required| Nullable | Type| Description | Format
 
 | ids
-|
-|
+| 
+| 
 |   List   of <<UUID>>
-| An array of identifiers for the sources to update. This must only include and websiteIds.
-| uuid
+| An array of identifiers for the sources to update. This must only include and websiteIds. 
+| uuid    
 
 |===
 
@@ -1602,18 +1602,18 @@ Additional properties:
 |     
 
 | uploadDate
-|
-|
-|   Date
+| 
+| 
+|   Date  
 | The date and time when the website was indexed
-| date-time
+| date-time    
 
 | embedded
-|
-|
-|   Boolean
+| 
+| 
+|   Boolean  
 | Indicates whether the website content is embedded in the index. If true, the website content is indexed and searchable.
-|
+|     
 
 |===
 
