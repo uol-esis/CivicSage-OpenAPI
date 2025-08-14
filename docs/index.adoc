@@ -1174,6 +1174,13 @@ This represents a feedback message.
 | The date and time when the file was uploaded
 | date-time    
 
+| embedded
+| 
+| 
+|   Boolean  
+| Indicates whether the file is embedded in the index. If true, the file content is indexed and searchable.
+|     
+
 |===
 
 
@@ -1600,6 +1607,13 @@ Additional properties:
 |   Date  
 | The date and time when the website was indexed
 | date-time    
+
+| embedded
+| 
+| 
+|   Boolean  
+| Indicates whether the website content is embedded in the index. If true, the website content is indexed and searchable.
+|     
 
 |===
 

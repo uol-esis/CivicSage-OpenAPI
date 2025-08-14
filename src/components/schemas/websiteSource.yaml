@@ -18,4 +18,7 @@ properties:
     type: string
     format: date-time
     description: The date and time when the website was indexed
+  embedded:
+    type: boolean
+    description: Indicates whether the website content is embedded in the index. If true, the website content is indexed and searchable.
 additionalProperties: true
