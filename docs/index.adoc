@@ -1378,6 +1378,13 @@ Additional properties:
 | The title of the source. 
 |     
 
+| uploadDate
+| 
+| 
+|   Date  
+| The date and time when the file or website was indexed. 
+| date-time    
+
 | text
 | X
 | 
