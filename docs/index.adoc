@@ -1,6 +1,6 @@
 = CivicSage
 team@openapitools.org
-0.5.0
+0.5.1
 :toc: left
 :numbered:
 :toclevels: 4
@@ -1377,6 +1377,13 @@ Additional properties:
 |   String  
 | The title of the source. 
 |     
+
+| uploadDate
+| 
+| 
+|   Date  
+| The date and time when the file was uploaded or website was indexed. 
+| date-time    
 
 | text
 | X
