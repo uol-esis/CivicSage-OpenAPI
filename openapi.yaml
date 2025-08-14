@@ -434,6 +434,7 @@ components:
       example:
         fileName: fileName
         title: title
+        embedded: true
         fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         fileId:
@@ -446,6 +447,10 @@ components:
         title:
           description: "The title of the indexed file, used in search results"
           type: string
+        embedded:
+          description: "Indicates whether the file is embedded in the index. If true,\
+            \ the file content is indexed and searchable."
+          type: boolean
       required:
       - fileId
       - fileName
@@ -456,6 +461,7 @@ components:
       example:
         websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         title: title
+        embedded: true
         url: url
       properties:
         websiteId:
@@ -468,6 +474,10 @@ components:
         title:
           description: The name of the indexed website
           type: string
+        embedded:
+          description: "Indicates whether the website content is embedded in the index.\
+            \ If true, the website content is indexed and searchable."
+          type: boolean
       required:
       - title
       - url
@@ -574,16 +584,20 @@ components:
         files:
         - fileName: fileName
           title: title
+          embedded: true
           fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         - fileName: fileName
           title: title
+          embedded: true
           fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         websites:
         - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           title: title
+          embedded: true
           url: url
         - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           title: title
+          embedded: true
           url: url
       properties:
         files:

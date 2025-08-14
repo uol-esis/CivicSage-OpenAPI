@@ -14,4 +14,7 @@ properties:
   title:
     type: string
     description: The title of the indexed file, used in search results
+  embedded:
+    type: boolean
+    description: Indicates whether the file is embedded in the index. If true, the file content is indexed and searchable.
 additionalProperties: true

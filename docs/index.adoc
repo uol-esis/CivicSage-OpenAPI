@@ -1082,6 +1082,13 @@ This represents a feedback message.
 | The title of the indexed file, used in search results
 |     
 
+| embedded
+| 
+| 
+|   Boolean  
+| Indicates whether the file is embedded in the index. If true, the file content is indexed and searchable.
+|     
+
 |===
 
 
@@ -1478,6 +1485,13 @@ Additional properties:
 | 
 |   String  
 | The name of the indexed website
+|     
+
+| embedded
+| 
+| 
+|   Boolean  
+| Indicates whether the website content is embedded in the index. If true, the website content is indexed and searchable.
 |     
 
 |===
