@@ -287,6 +287,27 @@ paths:
         "500":
           description: Internal server error
       summary: Get all indexed sources
+  /sources/websites/update:
+    post:
+      description: |
+        This endpoint allows you to update indexed website sources.
+        It requires an array of websiteIds to update the corresponding sources.
+        If the list is empty, all indexed websites will be updated.
+        If the list contains specific websiteIds, only those will be updated.
+        If the list contains a websiteId that does not exist, it will be ignored.
+      operationId: updateIndexedWebsite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateIndexedWebsite_request'
+        required: true
+      responses:
+        "200":
+          description: Source updated successfully
+        "500":
+          description: Internal server error
+      summary: Update indexed website
 components:
   schemas:
     searchQuery:
@@ -433,6 +454,7 @@ components:
       additionalProperties: true
       example:
         fileName: fileName
+        uploadDate: 2000-01-23T04:56:07.000+00:00
         title: title
         embedded: true
         fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -447,6 +469,10 @@ components:
         title:
           description: "The title of the indexed file, used in search results"
           type: string
+        uploadDate:
+          description: The date and time when the file was uploaded
+          format: date-time
+          type: string
         embedded:
           description: "Indicates whether the file is embedded in the index. If true,\
             \ the file content is indexed and searchable."
@@ -460,6 +486,7 @@ components:
       additionalProperties: true
       example:
         websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        uploadDate: 2000-01-23T04:56:07.000+00:00
         title: title
         embedded: true
         url: url
@@ -473,6 +500,10 @@ components:
           type: string
         title:
           description: The name of the indexed website
+          type: string
+        uploadDate:
+          description: The date and time when the website was indexed
+          format: date-time
           type: string
         embedded:
           description: "Indicates whether the website content is embedded in the index.\
@@ -583,19 +614,23 @@ components:
       example:
         files:
         - fileName: fileName
+          uploadDate: 2000-01-23T04:56:07.000+00:00
           title: title
           embedded: true
           fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         - fileName: fileName
+          uploadDate: 2000-01-23T04:56:07.000+00:00
           title: title
           embedded: true
           fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         websites:
         - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          uploadDate: 2000-01-23T04:56:07.000+00:00
           title: title
           embedded: true
           url: url
         - websiteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          uploadDate: 2000-01-23T04:56:07.000+00:00
           title: title
           embedded: true
           url: url
@@ -607,5 +642,16 @@ components:
         websites:
           items:
             $ref: '#/components/schemas/websiteSource'
+          type: array
+      type: object
+    updateIndexedWebsite_request:
+      properties:
+        ids:
+          description: |
+            An array of identifiers for the sources to update.
+            This must only include and websiteIds.
+          items:
+            format: uuid
+            type: string
           type: array
       type: object

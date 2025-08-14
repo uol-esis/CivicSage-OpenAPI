@@ -932,6 +932,91 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.updateIndexedWebsite]
+==== updateIndexedWebsite
+
+`POST /sources/websites/update`
+
+Update indexed website
+
+===== Description
+
+This endpoint allows you to update indexed website sources. It requires an array of websiteIds to update the corresponding sources. If the list is empty, all indexed websites will be updated. If the list contains specific websiteIds, only those will be updated. If the list contains a websiteId that does not exist, it will be ignored.
+
+
+// markup not found, no include::{specDir}sources/websites/update/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| UpdateIndexedWebsiteRequest
+|  <<UpdateIndexedWebsiteRequest>>
+| X
+|
+|
+
+|===
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.HTTP Response Codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Source updated successfully
+|  <<>>
+
+
+| 500
+| Internal server error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}sources/websites/update/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}sources/websites/update/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :sources/websites/update/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}sources/websites/update/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.uploadFile]
 ==== uploadFile
 
@@ -1082,12 +1167,19 @@ This represents a feedback message.
 | The title of the indexed file, used in search results
 |     
 
+| uploadDate
+|
+|
+|   Date
+| The date and time when the file was uploaded
+| date-time
+
 | embedded
-| 
-| 
-|   Boolean  
+|
+|
+|   Boolean
 | Indicates whether the file is embedded in the index. If true, the file content is indexed and searchable.
-|     
+|
 
 |===
 
@@ -1433,6 +1525,28 @@ Additional properties:
 
 
 
+[#UpdateIndexedWebsiteRequest]
+=== _UpdateIndexedWebsiteRequest_
+
+
+
+
+[.fields-UpdateIndexedWebsiteRequest]
+[cols="2,1,1,2,4,1"]
+|===
+| Field Name| Required| Nullable | Type| Description | Format
+
+| ids
+|
+|
+|   List   of <<UUID>>
+| An array of identifiers for the sources to update. This must only include and websiteIds.
+| uuid
+
+|===
+
+
+
 [#UploadFile200Response]
 === _UploadFile200Response_ 
 
@@ -1487,12 +1601,19 @@ Additional properties:
 | The name of the indexed website
 |     
 
+| uploadDate
+|
+|
+|   Date
+| The date and time when the website was indexed
+| date-time
+
 | embedded
-| 
-| 
-|   Boolean  
+|
+|
+|   Boolean
 | Indicates whether the website content is embedded in the index. If true, the website content is indexed and searchable.
-|     
+|
 
 |===
 

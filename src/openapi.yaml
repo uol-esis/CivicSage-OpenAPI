@@ -28,6 +28,8 @@ paths:
     $ref: './paths/completions.yaml#/summary'
   /sources:
     $ref: './paths/sources.yaml'
+  /sources/websites/update:
+    $ref: './paths/sources-websites-update.yaml'
 
 components:
   schemas:
