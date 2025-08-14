@@ -14,4 +14,8 @@ properties:
   title:
     type: string
     description: The title of the indexed file, used in search results
+  uploadDate:
+    type: string
+    format: date-time
+    description: The date and time when the file was uploaded
 additionalProperties: true

@@ -1082,6 +1082,13 @@ This represents a feedback message.
 | The title of the indexed file, used in search results
 |     
 
+| uploadDate
+| 
+| 
+|   Date  
+| The date and time when the file was uploaded
+| date-time    
+
 |===
 
 
@@ -1479,6 +1486,13 @@ Additional properties:
 |   String  
 | The name of the indexed website
 |     
+
+| uploadDate
+| 
+| 
+|   Date  
+| The date and time when the website was indexed
+| date-time    
 
 |===
 
