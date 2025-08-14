@@ -287,6 +287,27 @@ paths:
         "500":
           description: Internal server error
       summary: Get all indexed sources
+  /sources/websites/update:
+    post:
+      description: |
+        This endpoint allows you to update indexed website sources.
+        It requires an array of websiteIds to update the corresponding sources.
+        If the list is empty, all indexed websites will be updated.
+        If the list contains specific websiteIds, only those will be updated.
+        If the list contains a websiteId that does not exist, it will be ignored.
+      operationId: updateIndexedWebsite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateIndexedWebsite_request'
+        required: true
+      responses:
+        "200":
+          description: Source updated successfully
+        "500":
+          description: Internal server error
+      summary: Update indexed website
 components:
   schemas:
     searchQuery:
@@ -593,5 +614,16 @@ components:
         websites:
           items:
             $ref: '#/components/schemas/websiteSource'
+          type: array
+      type: object
+    updateIndexedWebsite_request:
+      properties:
+        ids:
+          description: |
+            An array of identifiers for the sources to update.
+            This must only include and websiteIds.
+          items:
+            format: uuid
+            type: string
           type: array
       type: object
