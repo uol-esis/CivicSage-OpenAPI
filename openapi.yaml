@@ -3,7 +3,7 @@ info:
   description: |
     CivicSage is a service that allows you to index files and websites.
   title: CivicSage
-  version: 0.5.0
+  version: 0.6.0
 servers:
 - description: Local development server
   url: localhost:8080/api/v1
@@ -143,6 +143,17 @@ paths:
         This endpoint will **not** index the file.
         It is only for uploading files that you want to index later.
       operationId: uploadFile
+      parameters:
+      - description: |
+          If set to true, the file will be stored temporarily and deleted after some time.
+          If set to false, the file will be stored permanently.
+          Temporary files cannot be indexed.
+          They should be used in chats.
+        in: query
+        name: temporary
+        schema:
+          default: false
+          type: boolean
       requestBody:
         content:
           multipart/form-data:
@@ -213,32 +224,111 @@ paths:
                 $ref: '#/components/schemas/getMetadataKeys_200_response'
           description: Metadata keys retrieved successfully
       summary: Get metadata keys
-  /completions/summary:
-    post:
-      description: |
-        This endpoint allows you to summarize embeddings using a prompt.
-        The prompt is used to generate a summary of the embeddings.
-      operationId: summarizeEmbeddings
+  /completions/chat:
+    delete:
+      operationId: deleteChat
+      parameters:
+      - description: The unique identifier for the chat session
+        in: path
+        name: chatId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "204":
+          description: Chat deleted successfully
+        "400":
+          description: Bad request
+        "404":
+          description: Chat not found
+        "500":
+          description: Internal server error
+      summary: Delete a chat
+    get:
+      operationId: getChat
+      parameters:
+      - description: The unique identifier for the chat session
+        in: query
+        name: chatId
+        required: false
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chat'
+          description: Chat retrieved successfully
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chat'
+          description: Chat created successfully
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Create or retrieve a chat
+    patch:
+      operationId: updateChat
+      parameters:
+      - description: The unique identifier for the chat session
+        in: query
+        name: chatId
+        required: true
+        schema:
+          format: uuid
+          type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/summarizeEmbeddings_request'
+              $ref: '#/components/schemas/chat'
+        required: true
+      responses:
+        "200":
+          description: Chat updated successfully
+        "400":
+          description: Bad request
+        "404":
+          description: Chat not found
+        "500":
+          description: Internal server error
+      summary: Update a chat
+    post:
+      operationId: sendMessage
+      parameters:
+      - description: The unique identifier for the chat session
+        in: query
+        name: chatId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/chatMessage'
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/summarizeEmbeddings_200_response'
-          description: Summary generated successfully
+                $ref: '#/components/schemas/chat'
+          description: Message sent successfully
         "400":
           description: Bad request
         "404":
-          description: Document not found
+          description: Chat not found
         "500":
           description: Internal server error
-      summary: Summarize embeddings with a prompt
+      summary: Send a message in a chat
   /sources:
     delete:
       description: |
@@ -514,6 +604,96 @@ components:
       - url
       - websiteId
       type: object
+    chat:
+      description: |
+        The chat schema represents a chat session, which includes a unique identifier,
+        a list of embeddings, a system prompt, and a list of messages.
+        Each message can contain files and website URLs for context.
+      example:
+        embeddings:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        systemPrompt: systemPrompt
+        chatId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        messages:
+        - role: user
+          websiteURLs:
+          - https://openapi-generator.tech
+          - https://openapi-generator.tech
+          files:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          content: content
+        - role: user
+          websiteURLs:
+          - https://openapi-generator.tech
+          - https://openapi-generator.tech
+          files:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          content: content
+      properties:
+        chatId:
+          description: The unique identifier for the chat session
+          format: uuid
+          type: string
+        embeddings:
+          description: |
+            A list of embedding IDs that are associated with the chat.
+            These embeddings can be used to provide context or additional information in the chat.
+          items:
+            format: uuid
+            type: string
+          type: array
+        systemPrompt:
+          description: The system prompt for the chat
+          type: string
+        messages:
+          items:
+            $ref: '#/components/schemas/chatMessage'
+          type: array
+      type: object
+    chatMessage:
+      description: |
+        The chat message schema represents a message in a chat session.
+        Each message has a role (user or assistant), content, and can include associated files and website URLs for context.
+        Files have to be uploaded via the `/files` endpoint before they can be used in a chat message.
+      example:
+        role: user
+        websiteURLs:
+        - https://openapi-generator.tech
+        - https://openapi-generator.tech
+        files:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        content: content
+      properties:
+        role:
+          description: The role of the message sender
+          enum:
+          - user
+          - assistant
+          type: string
+        content:
+          description: The content of the message
+          type: string
+        files:
+          description: |
+            A list of file IDs that are associated with the message.
+            These files can be used to provide context or additional information in the chat.
+          items:
+            format: uuid
+            type: string
+          type: array
+        websiteURLs:
+          description: |
+            A list of website URLs that are associated with the message.
+            These URLs can be used to provide context or additional information in the chat.
+          items:
+            format: uri
+            type: string
+          type: array
+      type: object
     IndexFiles_request_inner:
       additionalProperties: true
       example:
@@ -583,32 +763,6 @@ components:
           items:
             type: string
           type: array
-      type: object
-    summarizeEmbeddings_request:
-      properties:
-        documentIds:
-          description: Ids of the documents to summarize
-          items:
-            format: uuid
-            type: string
-          type: array
-        prompt:
-          description: The prompt to use for summarizing the embeddings
-          type: string
-        systemPrompt:
-          description: The system prompt
-          type: string
-      required:
-      - documentIds
-      - prompt
-      type: object
-    summarizeEmbeddings_200_response:
-      example:
-        summary: summary
-      properties:
-        summary:
-          description: The generated summary of the embeddings
-          type: string
       type: object
     getAllIndexedSources_200_response:
       example:
