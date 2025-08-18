@@ -37,6 +37,17 @@ post:
     This endpoint will **not** index the file.
     It is only for uploading files that you want to index later.
   operationId: uploadFile
+  parameters:
+    - name: temporary
+      in: query
+      description: |
+        If set to true, the file will be stored temporarily and deleted after some time.
+        If set to false, the file will be stored permanently.
+        Temporary files cannot be indexed.
+        They should be used in chats.
+      schema:
+        type: boolean
+        default: false
   requestBody:
     content:
       multipart/form-data:

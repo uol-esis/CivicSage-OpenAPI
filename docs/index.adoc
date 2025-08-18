@@ -28,6 +28,101 @@ CivicSage is a service that allows you to index files and websites.
 === Default
 
 
+[.deleteChat]
+==== deleteChat
+
+`DELETE /completions/chat`
+
+Delete a chat
+
+===== Description
+
+
+
+
+// markup not found, no include::{specDir}completions/chat/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| chatId
+| The unique identifier for the chat session 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.HTTP Response Codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 204
+| Chat deleted successfully
+|  <<>>
+
+
+| 400
+| Bad request
+|  <<>>
+
+
+| 404
+| Chat not found
+|  <<>>
+
+
+| 500
+| Internal server error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}completions/chat/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}completions/chat/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :completions/chat/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}completions/chat/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.deleteIndexedSource]
 ==== deleteIndexedSource
 
@@ -288,6 +383,103 @@ ifdef::internal-generation[]
 ===== Implementation
 
 // markup not found, no include::{specDir}sources/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getChat]
+==== getChat
+
+`GET /completions/chat`
+
+Create or retrieve a chat
+
+===== Description
+
+
+
+
+// markup not found, no include::{specDir}completions/chat/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| chatId
+| The unique identifier for the chat session 
+| -
+| null
+| 
+
+|===
+
+
+===== Return Type
+
+<<chat>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.HTTP Response Codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Chat retrieved successfully
+|  <<chat>>
+
+
+| 201
+| Chat created successfully
+|  <<chat>>
+
+
+| 400
+| Bad request
+|  <<>>
+
+
+| 500
+| Internal server error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}completions/chat/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}completions/chat/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :completions/chat/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}completions/chat/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -742,6 +934,116 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.sendMessage]
+==== sendMessage
+
+`POST /completions/chat`
+
+Send a message in a chat
+
+===== Description
+
+
+
+
+// markup not found, no include::{specDir}completions/chat/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| ChatMessage
+|  <<ChatMessage>>
+| X
+| 
+| 
+
+|===
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| chatId
+| The unique identifier for the chat session 
+| X
+| null
+| 
+
+|===
+
+
+===== Return Type
+
+<<chat>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.HTTP Response Codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Message sent successfully
+|  <<chat>>
+
+
+| 400
+| Bad request
+|  <<>>
+
+
+| 404
+| Chat not found
+|  <<>>
+
+
+| 500
+| Internal server error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}completions/chat/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}completions/chat/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :completions/chat/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}completions/chat/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.submitFeedback]
 ==== submitFeedback
 
@@ -835,19 +1137,19 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
-[.summarizeEmbeddings]
-==== summarizeEmbeddings
+[.updateChat]
+==== updateChat
 
-`POST /completions/summary`
+`PATCH /completions/chat`
 
-Summarize embeddings with a prompt
+Update a chat
 
 ===== Description
 
-This endpoint allows you to summarize embeddings using a prompt. The prompt is used to generate a summary of the embeddings. 
 
 
-// markup not found, no include::{specDir}completions/summary/POST/spec.adoc[opts=optional]
+
+// markup not found, no include::{specDir}completions/chat/PATCH/spec.adoc[opts=optional]
 
 
 
@@ -860,8 +1162,8 @@ This endpoint allows you to summarize embeddings using a prompt. The prompt is u
 |===
 |Name| Description| Required| Default| Pattern
 
-| SummarizeEmbeddingsRequest
-|  <<SummarizeEmbeddingsRequest>>
+| Chat
+|  <<Chat>>
 | X
 | 
 | 
@@ -870,16 +1172,27 @@ This endpoint allows you to summarize embeddings using a prompt. The prompt is u
 
 
 
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| chatId
+| The unique identifier for the chat session 
+| X
+| null
+| 
+
+|===
 
 
 ===== Return Type
 
-<<summarizeEmbeddings_200_response>>
 
 
-===== Content Type
+-
 
-* application/json
 
 ===== Responses
 
@@ -890,8 +1203,8 @@ This endpoint allows you to summarize embeddings using a prompt. The prompt is u
 
 
 | 200
-| Summary generated successfully
-|  <<summarizeEmbeddings_200_response>>
+| Chat updated successfully
+|  <<>>
 
 
 | 400
@@ -900,7 +1213,7 @@ This endpoint allows you to summarize embeddings using a prompt. The prompt is u
 
 
 | 404
-| Document not found
+| Chat not found
 |  <<>>
 
 
@@ -913,20 +1226,20 @@ This endpoint allows you to summarize embeddings using a prompt. The prompt is u
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}completions/summary/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}completions/chat/PATCH/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}completions/summary/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}completions/chat/PATCH/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :completions/summary/POST/POST.json[]
+// file not found, no * wiremock data link :completions/chat/PATCH/PATCH.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}completions/summary/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}completions/chat/PATCH/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1052,6 +1365,19 @@ This endpoint you to upload a file for indexing. This endpoint will **not** inde
 |===
 
 
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| temporary
+| If set to true, the file will be stored temporarily and deleted after some time. If set to false, the file will be stored permanently. Temporary files cannot be indexed. They should be used in chats.  
+| -
+| false
+| 
+
+|===
 
 
 ===== Return Type
@@ -1111,6 +1437,98 @@ endif::internal-generation[]
 
 [#models]
 == Models
+
+
+[#Chat]
+=== _Chat_ 
+
+The chat schema represents a chat session, which includes a unique identifier,
+a list of embeddings, a system prompt, and a list of messages.
+Each message can contain files and website URLs for context.
+
+
+
+[.fields-Chat]
+[cols="2,1,1,2,4,1"]
+|===
+| Field Name| Required| Nullable | Type| Description | Format
+
+| chatId
+| 
+| 
+|   UUID  
+| The unique identifier for the chat session
+| uuid    
+
+| embeddings
+| 
+| 
+|   List   of <<UUID>>
+| A list of embedding IDs that are associated with the chat. These embeddings can be used to provide context or additional information in the chat. 
+| uuid    
+
+| systemPrompt
+| 
+| 
+|   String  
+| The system prompt for the chat
+|     
+
+| messages
+| 
+| 
+|   List   of <<chatMessage>>
+| 
+|     
+
+|===
+
+
+
+[#ChatMessage]
+=== _ChatMessage_ 
+
+The chat message schema represents a message in a chat session.
+Each message has a role (user or assistant), content, and can include associated files and website URLs for context.
+Files have to be uploaded via the &#x60;/files&#x60; endpoint before they can be used in a chat message.
+
+
+
+[.fields-ChatMessage]
+[cols="2,1,1,2,4,1"]
+|===
+| Field Name| Required| Nullable | Type| Description | Format
+
+| role
+| 
+| 
+|  <<String>>  
+| The role of the message sender
+|  _Enum:_ user, assistant,  
+
+| content
+| 
+| 
+|   String  
+| The content of the message
+|     
+
+| files
+| 
+| 
+|   List   of <<UUID>>
+| A list of file IDs that are associated with the message. These files can be used to provide context or additional information in the chat. 
+| uuid    
+
+| websiteURLs
+| 
+| 
+|   List   of <<URI>>
+| A list of website URLs that are associated with the message. These URLs can be used to provide context or additional information in the chat. 
+| uri    
+
+|===
+
 
 
 [#Feedback]
@@ -1391,64 +1809,6 @@ Additional properties:
 |   Double  
 | The score of the search result. This is a measure of how well the result matches the search query. Higher scores indicate better matches. The value is between 0 and 1, where 1 is a perfect match. 
 | double    
-
-|===
-
-
-
-[#SummarizeEmbeddings200Response]
-=== _SummarizeEmbeddings200Response_ 
-
-
-
-
-[.fields-SummarizeEmbeddings200Response]
-[cols="2,1,1,2,4,1"]
-|===
-| Field Name| Required| Nullable | Type| Description | Format
-
-| summary
-| 
-| 
-|   String  
-| The generated summary of the embeddings
-|     
-
-|===
-
-
-
-[#SummarizeEmbeddingsRequest]
-=== _SummarizeEmbeddingsRequest_ 
-
-
-
-
-[.fields-SummarizeEmbeddingsRequest]
-[cols="2,1,1,2,4,1"]
-|===
-| Field Name| Required| Nullable | Type| Description | Format
-
-| documentIds
-| X
-| 
-|   List   of <<UUID>>
-| Ids of the documents to summarize
-| uuid    
-
-| prompt
-| X
-| 
-|   String  
-| The prompt to use for summarizing the embeddings
-|     
-
-| systemPrompt
-| 
-| 
-|   String  
-| The system prompt
-|     
 
 |===
 
