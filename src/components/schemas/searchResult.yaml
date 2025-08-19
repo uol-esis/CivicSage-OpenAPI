@@ -33,6 +33,11 @@ properties:
     type: string
     description: |
       The title of the source.
+  uploadDate:
+    type: string
+    format: date-time
+    description: |
+      The date and time when the file was uploaded or website was indexed.
   text:
     type: string
     description: |

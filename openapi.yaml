@@ -422,6 +422,7 @@ components:
       example:
         score: 0.8008281904610115
         fileName: fileName
+        uploadDate: 2000-01-23T04:56:07.000+00:00
         documentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         text: text
         title: title
@@ -452,6 +453,11 @@ components:
         title:
           description: |
             The title of the source.
+          type: string
+        uploadDate:
+          description: |
+            The date and time when the file was uploaded or website was indexed.
+          format: date-time
           type: string
         text:
           description: |
