@@ -96,7 +96,7 @@ chat:
     operationId: deleteChat
     parameters:
       - name: chatId
-        in: path
+        in: query
         required: true
         schema:
           type: string
