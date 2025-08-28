@@ -10,7 +10,6 @@ properties:
     description: The unique identifier for the chat session
   embeddings:
     type: array
-    uniqueItems: true
     items:
       type: string
       format: uuid
