@@ -651,6 +651,7 @@ components:
             format: uuid
             type: string
           type: array
+          uniqueItems: true
         systemPrompt:
           description: The system prompt for the chat
           type: string
@@ -691,6 +692,7 @@ components:
             format: uuid
             type: string
           type: array
+          uniqueItems: true
         websiteURLs:
           description: |
             A list of website URLs that are associated with the message.
@@ -699,6 +701,7 @@ components:
             format: uri
             type: string
           type: array
+          uniqueItems: true
       type: object
     IndexFiles_request_inner:
       additionalProperties: true

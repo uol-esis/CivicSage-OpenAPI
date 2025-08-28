@@ -15,6 +15,7 @@ properties:
     description: The content of the message
   files:
     type: array
+    uniqueItems: true
     items:
       type: string
       format: uuid
@@ -23,6 +24,7 @@ properties:
       These files can be used to provide context or additional information in the chat.
   websiteURLs:
     type: array
+    uniqueItems: true
     items:
       type: string
       format: uri
