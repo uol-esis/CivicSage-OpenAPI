@@ -1546,7 +1546,7 @@ Files have to be uploaded via the &#x60;/files&#x60; endpoint before they can be
 | 
 | 
 |   List   of <<chatFile>>
-| A list of file IDs that are associated with the message. These files can be used to provide context or additional information in the chat. 
+| A list of files that are associated with the message. These files can be used to provide context or additional information in the chat. 
 |     
 
 | websiteURLs

@@ -691,7 +691,7 @@ components:
           type: string
         files:
           description: |
-            A list of file IDs that are associated with the message.
+            A list of files that are associated with the message.
             These files can be used to provide context or additional information in the chat.
           items:
             $ref: '#/components/schemas/chatFile'
