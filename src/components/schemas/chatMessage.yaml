@@ -16,8 +16,7 @@ properties:
   files:
     type: array
     items:
-      type: string
-      format: uuid
+      $ref: './chatFile.yaml'
     description: |
       A list of file IDs that are associated with the message.
       These files can be used to provide context or additional information in the chat.

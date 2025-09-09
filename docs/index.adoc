@@ -1,6 +1,6 @@
 = CivicSage
 team@openapitools.org
-0.6.1
+0.7.0
 :toc: left
 :numbered:
 :toclevels: 4
@@ -1485,6 +1485,35 @@ Each message can contain files and website URLs for context.
 
 
 
+[#ChatFile]
+=== _ChatFile_ 
+
+
+
+
+[.fields-ChatFile]
+[cols="2,1,1,2,4,1"]
+|===
+| Field Name| Required| Nullable | Type| Description | Format
+
+| fileId
+| X
+| 
+|   UUID  
+| The unique identifier for the file
+| uuid    
+
+| fileName
+| 
+| 
+|   String  
+| The name of the file
+|     
+
+|===
+
+
+
 [#ChatMessage]
 === _ChatMessage_ 
 
@@ -1516,9 +1545,9 @@ Files have to be uploaded via the &#x60;/files&#x60; endpoint before they can be
 | files
 | 
 | 
-|   List   of <<UUID>>
+|   List   of <<chatFile>>
 | A list of file IDs that are associated with the message. These files can be used to provide context or additional information in the chat. 
-| uuid    
+|     
 
 | websiteURLs
 | 

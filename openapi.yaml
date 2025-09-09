@@ -3,7 +3,7 @@ info:
   description: |
     CivicSage is a service that allows you to index files and websites.
   title: CivicSage
-  version: 0.6.1
+  version: 0.7.0
 servers:
 - description: Local development server
   url: localhost:8080/api/v1
@@ -627,16 +627,20 @@ components:
           - https://openapi-generator.tech
           - https://openapi-generator.tech
           files:
-          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - fileName: fileName
+            fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - fileName: fileName
+            fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           content: content
         - role: user
           websiteURLs:
           - https://openapi-generator.tech
           - https://openapi-generator.tech
           files:
-          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - fileName: fileName
+            fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - fileName: fileName
+            fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           content: content
       properties:
         chatId:
@@ -670,8 +674,10 @@ components:
         - https://openapi-generator.tech
         - https://openapi-generator.tech
         files:
-        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - fileName: fileName
+          fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - fileName: fileName
+          fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         content: content
       properties:
         role:
@@ -688,8 +694,7 @@ components:
             A list of file IDs that are associated with the message.
             These files can be used to provide context or additional information in the chat.
           items:
-            format: uuid
-            type: string
+            $ref: '#/components/schemas/chatFile'
           type: array
         websiteURLs:
           description: |
@@ -699,6 +704,21 @@ components:
             format: uri
             type: string
           type: array
+      type: object
+    chatFile:
+      example:
+        fileName: fileName
+        fileId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        fileId:
+          description: The unique identifier for the file
+          format: uuid
+          type: string
+        fileName:
+          description: The name of the file
+          type: string
+      required:
+      - fileId
       type: object
     IndexFiles_request_inner:
       additionalProperties: true
