@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Moved to [Monorepo](https://github.com/uol-esis/CivicSage)
+
 # CivicSage-OpenAPI
 
 This repository contains the OpenAPI specification for the CivicSage API.
